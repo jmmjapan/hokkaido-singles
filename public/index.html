@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hokkaido Singles｜北海道シングルス</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Hiragino Kaku Gothic ProN', sans-serif; color: #333; }
+
+    /* ヘッダー */
+    header {
+      background: #1a3a2a;
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 20px; letter-spacing: 2px; }
+    header a {
+      background: #c8a45a;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 24px;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    /* ヒーロー */
+    .hero {
+      background: linear-gradient(135deg, #1a3a2a 0%, #2d5a3d 100%);
+      color: white;
+      text-align: center;
+      padding: 80px 24px;
+    }
+    .hero h2 { font-size: 32px; line-height: 1.6; margin-bottom: 16px; }
+    .hero p { font-size: 18px; opacity: 0.85; margin-bottom: 8px; }
+    .hero .sub { font-size: 14px; opacity: 0.7; margin-bottom: 40px; }
+    .hero .btn {
+      background: #c8a45a;
+      color: white;
+      padding: 16px 48px;
+      border-radius: 32px;
+      text-decoration: none;
+      font-size: 18px;
+      display: inline-block;
+    }
+
+    /* コンセプト */
+    .concept {
+      background: #f9f6f0;
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .concept h3 { font-size: 24px; color: #1a3a2a; margin-bottom: 32px; }
+    .concept-grid {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .concept-card {
+      background: white;
+      border-radius: 16px;
+      padding: 32px 24px;
+      width: 220px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .concept-card .icon { font-size: 40px; margin-bottom: 16px; }
+    .concept-card p { font-size: 14px; line-height: 1.7; color: #555; }
+
+    /* 料金 */
+    .pricing {
+      padding: 64px 24px;
+      text-align: center;
+    }
+    .pricing h3 { font-size: 24px; color: #1a3a2a; margin-bottom: 8px; }
+    .pricing .note { font-size: 14px; color: #888; margin-bottom: 40px; }
+    .plan-grid {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .plan {
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      padding: 40px 32px;
+      width: 280px;
+    }
+    .plan.featured { border-color: #c8a45a; background: #fffbf3; }
+    .plan h4 { font-size: 20px; margin-bottom: 8px; }
+    .plan .price { font-size: 36px; font-weight: bold; color: #1a3a2a; margin: 16px 0; }
+    .plan .price span { font-size: 16px; }
+    .plan ul { list-style: none; text-align: left; }
+    .plan ul li { padding: 8px 0; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+    .plan ul li::before { content: "✓ "; color: #c8a45a; }
+
+    /* CTA */
+    .cta {
+      background: #1a3a2a;
+      color: white;
+      text-align: center;
+      padding: 64px 24px;
+    }
+    .cta h3 { font-size: 24px; margin-bottom: 16px; }
+    .cta p { opacity: 0.8; margin-bottom: 32px; }
+    .cta a {
+      background: #c8a45a;
+      color: white;
+      padding: 16px 48px;
+      border-radius: 32px;
+      text-decoration: none;
+      font-size: 18px;
+      display: inline-block;
+    }
+
+    /* フッター */
+    footer {
+      background: #111;
+      color: #888;
+      text-align: center;
+      padding: 24px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌿 Hokkaido Singles</h1>
+    <a href="/register.html">入会する</a>
+  </header>
+
+  <section class="hero">
+    <h2>大人が安心して集まれる、<br>小さな村のような場所。</h2>
+    <p>結婚相談所ほど重くなく、マッチングアプリほど軽すぎない。</p>
+    <p class="sub">趣味や会話を通して、ちゃんとした人と、ちゃんと出会う。</p>
+    <a href="/register.html" class="btn">無料で2ヶ月試してみる</a>
+  </section>
+
+  <section class="concept">
+    <h3>Hokkaido Singlesの3つの特徴</h3>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <div class="icon">🏡</div>
+        <p>安心できる村のような<br>コミュニティ。<br>知っている顔が増えていく。</p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">⚾</div>
+        <p>ファイターズ部・グルメ部・<br>お散歩部など<br>趣味でつながる部活制度。</p>
+      </div>
+      <div class="concept-card">
+        <div class="icon">☕</div>
+        <p>気になる人に<br>15分のZoomお茶会を<br>申し込める仕組み。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pricing">
+    <h3>料金プラン</h3>
+    <p class="note">入会金 3,500円（初回のみ）｜最初の2ヶ月は無料</p>
+    <div class="plan-grid">
+      <div class="plan">
+        <h4>ライトプラン</h4>
+        <div class="price">¥1,100<span>/月</span></div>
+        <ul>
+          <li>部活参加・グループチャット</li>
+          <li>基本プロフィール閲覧</li>
+        </ul>
+      </div>
+      <div class="plan featured">
+        <h4>⭐ スタンダードプラン</h4>
+        <div class="price">¥3,300<span>/月</span></div>
+        <ul>
+          <li>部活参加・グループチャット</li>
+          <li>基本プロフィール閲覧</li>
+          <li>職業・学歴・年収閲覧</li>
+          <li>写真閲覧</li>
+          <li>お茶に誘うボタン</li>
+          <li>1対1チャット</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h3>まずは2ヶ月、無料で試してみませんか？</h3>
+    <p>審査制なので、安心して参加できます。</p>
+    <a href="/register.html">入会申し込みへ</a>
+  </section>
+
+  <footer>
+    <p>© 2026 Hokkaido Singles｜運営：日本マッチメーカー</p>
+  </footer>
+
+</body>
+</html>

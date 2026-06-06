@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プロフィール｜Hokkaido Singles</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Hiragino Kaku Gothic ProN', sans-serif; background: #f9f6f0; color: #333; }
+    header { background: #1a3a2a; color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+    header h1 { font-size: 18px; letter-spacing: 2px; }
+    .logout-btn { background: transparent; border: 1px solid white; color: white; padding: 6px 16px; border-radius: 20px; cursor: pointer; font-size: 13px; }
+    .container { max-width: 560px; margin: 40px auto; padding: 0 16px; }
+    .card { background: white; border-radius: 16px; padding: 32px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); margin-bottom: 24px; }
+    h2 { font-size: 20px; color: #1a3a2a; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #e0e0e0; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #555; }
+    input, select, textarea { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; }
+    textarea { height: 100px; resize: vertical; }
+    input:focus, select:focus, textarea:focus { border-color: #1a3a2a; }
+    .btn { width: 100%; background: #1a3a2a; color: white; padding: 16px; border: none; border-radius: 32px; font-size: 16px; cursor: pointer; }
+    .btn:hover { background: #2d5a3d; }
+    .badge-area { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .badge { padding: 4px 12px; border-radius: 20px; font-size: 13px; background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+    .badge.inactive { background: #f5f5f5; border-color: #ddd; color: #999; }
+    .photo-area { text-align: center; margin-bottom: 20px; }
+    .photo-preview { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid #1a3a2a; margin-bottom: 12px; display: none; }
+    .photo-placeholder { width: 120px; height: 120px; border-radius: 50%; background: #e0e0e0; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .plan-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-left: 8px; }
+    .plan-standard { background: #fef3c7; color: #92400e; }
+    .plan-light { background: #e0e7ff; color: #3730a3; }
+    .success { background: #f0fff4; border: 1px solid #68d391; border-radius: 8px; padding: 16px; margin-top: 16px; display: none; color: #276749; text-align: center; }
+    .error { color: #e53e3e; font-size: 13px; margin-top: 8px; display: none; }
+    .standard-only { background: #fffbf3; border: 1px solid #f6e05e; border-radius: 8px; padding: 16px; }
+    .standard-only-label { font-size: 12px; color: #d69e2e; margin-bottom: 12px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌿 Hokkaido Singles</h1>
+  <button class="logout-btn" onclick="logout()">ログアウト</button>
+</header>
+
+<div class="container">
+
+  <!-- プロフィールカード -->
+  <div class="card">
+    <h2 id="profile-title">プロフィール編集</h2>
+
+    <!-- バッジ表示 -->
+    <div class="badge-area" id="badge-area"></div>
+
+    <!-- 写真（スタンダードのみ） -->
+    <div id="photo-section" style="display:none">
+      <div class="photo-area">
+        <div class="photo-placeholder" id="photo-placeholder">👤</div>
+        <img id="photo-preview" class="photo-preview">
+        <br>
+        <label style="display:inline-block;cursor:pointer;color:#1a3a2a;font-size:14px;text-decoration:underline;">
+          写真を選択
+          <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="previewPhoto(this)">
+        </label>
+        <p style="font-size:12px;color:#888;margin-top:4px;">※任意。登録すると写真バッジがつきます</p>
+      </div>
+    </div>
+
+    <!-- 基本情報（全員） -->
+    <div class="form-group">
+      <label>ニックネーム *</label>
+      <input type="text" id="nickname" placeholder="例：さっぽろ太郎">
+    </div>
+
+    <div class="form-group">
+      <label>自己紹介</label>
+      <textarea id="bio" placeholder="趣味や好きなことを書いてください"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>婚活スタイル</label>
+      <select id="marriage_style">
+        <option value="">選択してください</option>
+        <option value="serious">真剣に結婚を考えている</option>
+        <option value="casual">まずは出会いから</option>
+        <option value="undecided">まだ決めていない</option>
+      </select>
+    </div>
+
+    <!-- スタンダードのみ -->
+    <div id="standard-section" style="display:none">
+      <div class="standard-only">
+        <p class="standard-only-label">⭐ スタンダードプラン限定項目</p>
+
+        <div class="form-group">
+          <label>職業</label>
+          <input type="text" id="occupation_profile" placeholder="例：会社員、看護師">
+        </div>
+
+        <div class="form-group">
+          <label>学歴</label>
+          <select id="education">
+            <option value="">選択してください</option>
+            <option value="high_school">高校卒</option>
+            <option value="vocational">専門学校卒</option>
+            <option value="junior_college">短大卒</option>
+            <option value="university">大学卒</option>
+            <option value="graduate">大学院卒</option>
+          </select>
+        </div>
+
+        <!-- 年収（男性のみ） -->
+        <div class="form-group" id="income-section" style="display:none">
+          <label>年収</label>
+          <select id="income">
+            <option value="">選択してください</option>
+            <option value="under300">300万円未満</option>
+            <option value="300to500">300〜500万円</option>
+            <option value="500to700">500〜700万円</option>
+            <option value="700to1000">700〜1000万円</option>
+            <option value="over1000">1000万円以上</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="error" id="error-msg"></div>
+    <div class="success" id="success-msg">✅ プロフィールを保存しました！</div>
+
+    <button class="btn" onclick="saveProfile()" style="margin-top:20px">保存する</button>
+    <div style="margin-top:16px;text-align:center;">
+  <button class="btn" onclick="goToPayment()" style="background:#6772e5;">
+    💳 月額プランの支払いへ進む
+  </button>
+  <p style="font-size:12px;color:#888;margin-top:8px;">Stripeの安全な決済ページに移動します</p>
+</div>
+  </div>
+
+</div>
+
+<script>
+  const token = localStorage.getItem('member_token');
+  const memberInfo = JSON.parse(localStorage.getItem('member_info') || '{}');
+
+  if (!token) {
+    window.location.href = 'login.html';
+  }
+
+  // 初期表示
+  window.onload = async function() {
+    // プラン・性別に応じてセクション表示
+    if (memberInfo.plan === 'standard') {
+      document.getElementById('standard-section').style.display = 'block';
+      document.getElementById('photo-section').style.display = 'block';
+    }
+    if (memberInfo.gender === 'male' && memberInfo.plan === 'standard') {
+      document.getElementById('income-section').style.display = 'block';
+    }
+
+    // 既存プロフィール読み込み
+    try {
+      const res = await fetch('/api/member/profile', {
+        headers: { 'Authorization': 'Bearer ' + token }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.nickname) document.getElementById('nickname').value = data.nickname;
+        if (data.bio) document.getElementById('bio').value = data.bio;
+        if (data.marriage_style) document.getElementById('marriage_style').value = data.marriage_style;
+        if (data.occupation_profile) document.getElementById('occupation_profile').value = data.occupation_profile;
+        if (data.education) document.getElementById('education').value = data.education;
+        if (data.income) document.getElementById('income').value = data.income;
+        if (data.photo_url) {
+          document.getElementById('photo-preview').src = data.photo_url;
+          document.getElementById('photo-preview').style.display = 'block';
+          document.getElementById('photo-placeholder').style.display = 'none';
+        }
+        updateBadges(data);
+      }
+    } catch(e) {}
+  };
+
+  function updateBadges(data) {
+    const area = document.getElementById('badge-area');
+    area.innerHTML = '';
+    const badges = [
+      { key: 'photo_url', label: '📷 写真バッジ' },
+      { key: 'id_verified', label: '✅ 独身証明バッジ' },
+      { key: 'marriage_style', label: '💍 婚活宣言バッジ' },
+    ];
+    badges.forEach(b => {
+      const el = document.createElement('span');
+      el.className = 'badge' + (data[b.key] ? '' : ' inactive');
+      el.textContent = b.label;
+      area.appendChild(el);
+    });
+  }
+
+  function previewPhoto(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        document.getElementById('photo-preview').src = e.target.result;
+        document.getElementById('photo-preview').style.display = 'block';
+        document.getElementById('photo-placeholder').style.display = 'none';
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  async function saveProfile() {
+    const formData = new FormData();
+    formData.append('nickname', document.getElementById('nickname').value);
+    formData.append('bio', document.getElementById('bio').value);
+    formData.append('marriage_style', document.getElementById('marriage_style').value);
+
+    if (memberInfo.plan === 'standard') {
+      formData.append('occupation_profile', document.getElementById('occupation_profile').value);
+      formData.append('education', document.getElementById('education').value);
+      const photoFile = document.getElementById('photo-file').files[0];
+      if (photoFile) formData.append('photo', photoFile);
+    }
+    if (memberInfo.gender === 'male' && memberInfo.plan === 'standard') {
+      formData.append('income', document.getElementById('income').value);
+    }
+
+    try {
+      const res = await fetch('/api/member/profile', {
+        method: 'POST',
+        headers: { 'Authorization': 'Bearer ' + token },
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        document.getElementById('error-msg').textContent = data.error || 'エラーが発生しました';
+        document.getElementById('error-msg').style.display = 'block';
+        return;
+      }
+      document.getElementById('error-msg').style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+      setTimeout(() => document.getElementById('success-msg').style.display = 'none', 3000);
+      updateBadges(data);
+    } catch(e) {
+      document.getElementById('error-msg').textContent = '通信エラーが発生しました';
+      document.getElementById('error-msg').style.display = 'block';
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('member_token');
+    localStorage.removeItem('member_info');
+    window.location.href = 'login.html';
+  }
+  async function goToPayment() {
+    try {
+      const res = await fetch('/api/create-subscription', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ plan: memberInfo.plan })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        alert(data.error || '決済ページへの移動に失敗しました');
+      }
+    } catch(e) {
+      alert('通信エラーが発生しました');
+    }
+  }
+</script>
+
+</body>
+</html>

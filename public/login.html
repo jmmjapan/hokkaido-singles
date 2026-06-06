@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン｜Hokkaido Singles</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Hiragino Kaku Gothic ProN', sans-serif; background: #f9f6f0; color: #333; }
+    header { background: #1a3a2a; color: white; padding: 16px 24px; }
+    header h1 { font-size: 18px; letter-spacing: 2px; }
+    .container { max-width: 440px; margin: 64px auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); }
+    h2 { font-size: 22px; color: #1a3a2a; margin-bottom: 8px; }
+    .sub { font-size: 14px; color: #888; margin-bottom: 32px; }
+    .form-group { margin-bottom: 20px; }
+    label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; color: #555; }
+    input { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px; outline: none; }
+    input:focus { border-color: #1a3a2a; }
+    .btn { width: 100%; background: #1a3a2a; color: white; padding: 16px; border: none; border-radius: 32px; font-size: 16px; cursor: pointer; margin-top: 8px; }
+    .btn:hover { background: #2d5a3d; }
+    .error { color: #e53e3e; font-size: 13px; margin-top: 8px; display: none; }
+    .links { text-align: center; margin-top: 24px; font-size: 13px; color: #888; }
+    .links a { color: #1a3a2a; text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>🌿 Hokkaido Singles</h1>
+</header>
+
+<div class="container">
+  <h2>ログイン</h2>
+  <p class="sub">承認済み会員の方はこちらからログインしてください。</p>
+
+  <div class="form-group">
+    <label>メールアドレス</label>
+    <input type="email" id="email" placeholder="example@email.com">
+  </div>
+
+  <div class="form-group">
+    <label>パスワード</label>
+    <input type="password" id="password" placeholder="パスワード">
+  </div>
+
+  <div class="error" id="error-msg"></div>
+
+  <button class="btn" onclick="login()">ログイン</button>
+
+  <div class="links">
+    <p>まだ会員でない方は<a href="register.html">こちらから申し込み</a></p>
+  </div>
+</div>
+
+<script>
+  async function login() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    if (!email || !password) {
+      showError('メールアドレスとパスワードを入力してください');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/member/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        showError(data.error || 'ログインできませんでした');
+        return;
+      }
+      localStorage.setItem('member_token', data.token);
+      localStorage.setItem('member_info', JSON.stringify(data.user));
+      window.location.href = 'profile.html';
+    } catch (e) {
+      showError('通信エラーが発生しました');
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
