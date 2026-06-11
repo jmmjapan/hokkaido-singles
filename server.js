@@ -164,7 +164,7 @@ app.patch('/api/admin/users/:id/approve', async (req, res) => {
         <p>${data[0].nickname} さん</p>
         <p>審査が完了し、Hokkaido Singles への入会が承認されました。</p>
         <p>以下よりログインしてプロフィールを作成してください。</p>
-        <p><a href="http://localhost:3000">Hokkaido Singles へログイン</a></p>
+        <p><a href="${process.env.BASE_URL || 'https://hokkaido-singles.vercel.app'}">Hokkaido Singles へログイン</a></p>
         <br>
         <p>Hokkaido Singles 運営事務局</p>
       `
