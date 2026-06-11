@@ -6,11 +6,12 @@ const jwt = require('jsonwebtoken');
 const { createClient } = require('@supabase/supabase-js');
 const multer = require('multer');
 const nodemailer = require('nodemailer');
+const path = require('path');
 const upload = multer({ storage: multer.memoryStorage() });
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // DB操作用クライアント（service key・ログイン状態を持たせない）
 const supabase = createClient(
