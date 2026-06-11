@@ -44,6 +44,9 @@
 
 <div class="container">
 
+  <!-- 決済結果バナー -->
+  <div id="payment-banner" style="display:none;padding:16px 20px;border-radius:10px;margin-bottom:20px;font-weight:bold;text-align:center;"></div>
+
   <!-- プロフィールカード -->
   <div class="card">
     <h2 id="profile-title">プロフィール編集</h2>
@@ -127,7 +130,7 @@
     <div class="success" id="success-msg">✅ プロフィールを保存しました！</div>
 
     <button class="btn" onclick="saveProfile()" style="margin-top:20px">保存する</button>
-    <div style="margin-top:16px;text-align:center;">
+    <div id="payment-area" style="margin-top:16px;text-align:center;">
   <button class="btn" onclick="goToPayment()" style="background:#6772e5;">
     💳 月額プランの支払いへ進む
   </button>
@@ -147,6 +150,28 @@
 
   // 初期表示
   window.onload = async function() {
+    // 決済結果の表示
+    const params = new URLSearchParams(window.location.search);
+    const payment = params.get('payment');
+    if (payment) {
+      const banner = document.getElementById('payment-banner');
+      if (payment === 'success') {
+        banner.style.background = '#e6f7ed';
+        banner.style.color = '#1a3a2a';
+        banner.style.border = '1px solid #1a3a2a';
+        banner.innerHTML = '🎉 お支払いが完了しました！<br><span style="font-weight:normal;font-size:13px;">会員プランが有効になりました。プロフィールを充実させて活動を始めましょう。</span>';
+        document.getElementById('payment-area').style.display = 'none';
+      } else if (payment === 'cancel') {
+        banner.style.background = '#fff4e5';
+        banner.style.color = '#8a5a00';
+        banner.style.border = '1px solid #e0a800';
+        banner.innerHTML = 'お支払いはキャンセルされました。<br><span style="font-weight:normal;font-size:13px;">いつでも下の「支払いへ進む」ボタンから再開できます。</span>';
+      }
+      banner.style.display = 'block';
+      // URLからパラメータを消す（リロードで再表示されないように）
+      history.replaceState(null, '', window.location.pathname);
+    }
+
     // プラン・性別に応じてセクション表示
     if (memberInfo.plan === 'standard') {
       document.getElementById('standard-section').style.display = 'block';
