@@ -29,8 +29,8 @@ const supabaseAuth = createClient(
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_PASS
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   }
 });
 
@@ -57,7 +57,7 @@ app.post('/api/register', upload.single('id_document'), async (req, res) => {
 
     // 申込受付メールを送信
     await transporter.sendMail({
-      from: `"Hokkaido Singles" <${process.env.GMAIL_USER}>`,
+      from: `"Hokkaido Singles" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: '【Hokkaido Singles】お申し込みを受け付けました',
       html: `
@@ -157,7 +157,7 @@ app.patch('/api/admin/users/:id/approve', async (req, res) => {
 
     // 承認メールを送信
     await transporter.sendMail({
-      from: `"Hokkaido Singles" <${process.env.GMAIL_USER}>`,
+      from: `"Hokkaido Singles" <${process.env.EMAIL_USER}>`,
       to: data[0].email,
       subject: '【Hokkaido Singles】審査が完了しました',
       html: `
@@ -192,7 +192,7 @@ app.patch('/api/admin/users/:id/reject', async (req, res) => {
 
     // 否認メールを送信
     await transporter.sendMail({
-      from: `"Hokkaido Singles" <${process.env.GMAIL_USER}>`,
+      from: `"Hokkaido Singles" <${process.env.EMAIL_USER}>`,
       to: data[0].email,
       subject: '【Hokkaido Singles】審査結果のご連絡',
       html: `
