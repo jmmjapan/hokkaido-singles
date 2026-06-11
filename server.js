@@ -318,8 +318,8 @@ app.post('/api/create-subscription', async (req, res) => {
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: `http://localhost:3000/profile.html?payment=success`,
-      cancel_url: `http://localhost:3000/login.html?payment=cancel`,
+      success_url: `${process.env.BASE_URL || 'http://localhost:3000'}/profile.html?payment=success`,
+      cancel_url: `${process.env.BASE_URL || 'http://localhost:3000'}/profile.html?payment=cancel`,
     });
 
     res.json({ url: session.url });
