@@ -193,8 +193,7 @@
           showError(data.error || 'エラーが発生しました');
           return;
         }
-        document.getElementById('error-msg').style.display = 'none';
-        document.getElementById('success-msg').style.display = 'block';
+        window.location.href = 'thanks.html';
       } catch (e) {
         showError('通信エラーが発生しました');
       }
