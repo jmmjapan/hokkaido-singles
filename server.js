@@ -12,11 +12,19 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
+// DB操作用クライアント（service key・ログイン状態を持たせない）
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
+  process.env.SUPABASE_SERVICE_KEY,
+  { auth: { persistSession: false, autoRefreshToken: false } }
 );
 
+// ログイン認証専用クライアント（こっちでサインインする）
+const supabaseAuth = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_KEY,
+  { auth: { persistSession: false, autoRefreshToken: false } }
+);
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -70,7 +78,7 @@ app.post('/api/register', upload.single('id_document'), async (req, res) => {
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
   try {
-    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+    const { data: authData, error: authError } = await supabaseAuth.auth.signInWithPassword({
       email,
       password
     });
@@ -95,9 +103,10 @@ app.get('/api/admin/users', async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (!decoded.is_admin) return res.status(403).json({ error: '管理者権限が必要です' });
-    const { data, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
-    if (error) return res.status(400).json({ error: error.message });
-    res.json(data);
+   const { data, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+if (error) { console.log('DB ERROR:', error); return res.status(400).json({ error: error.message }); }
+console.log('USERS COUNT:', data.length);
+res.json(data);
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
