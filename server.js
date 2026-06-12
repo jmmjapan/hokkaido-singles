@@ -319,6 +319,7 @@ app.post('/api/create-subscription', async (req, res) => {
       payment_method_types: ['card'],
       line_items: [{ price: priceId, quantity: 1 }],
       mode: 'subscription',
+      subscription_data: { trial_period_days: 60 },
       success_url: `${process.env.BASE_URL || 'http://localhost:3000'}/profile.html?payment=success`,
       cancel_url: `${process.env.BASE_URL || 'http://localhost:3000'}/profile.html?payment=cancel`,
     });
